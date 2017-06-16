@@ -1,0 +1,56 @@
+# RTCarInfo Output - Static car, in pits.
+
+{
+                  :identifier => "a\u0000",
+                     :rt_size => 328,
+                   :speed_kmh => 0.006255738902837038,
+                   :speed_mph => 0.003887136233970523,
+                    :speed_ms => 0.001737705315463245,
+              :is_abs_enabled => 1,
+            :is_abs_in_action => 0,
+             :is_tc_in_action => 0,
+               :is_tc_enabled => 0,
+                   :is_in_pit => 1,
+        :is_engine_limiter_on => 0,
+              :acc_g_vertical => 0.0,
+            :acc_g_horizontal => 0.0,
+               :acc_g_frontal => 0.0,
+                    :lap_time => 1450737664,
+                    :last_lap => 7,
+                    :best_lap => 0,
+                   :lap_count => 0,
+                         :gas => 0.0,
+                       :brake => 0.0,
+                      :clutch => 2.2779507836064226e-41,
+                  :engine_rpm => 2.0,
+                       :steer => 2.4612406227401087e-41,
+                        :gear => 65536,
+                   :cg_height => 8796093022208.0,
+         :wheel_angular_speed => 2.2601542931094975e-41,
+                  :slip_angle => 0.0,
+    :slip_angle_contact_patch => 0.0,
+                  :slip_ratio => 0.0,
+                   :tyre_slip => -1.2379400392853803e+28,
+                     :nd_slip => 0.0012797621311619878,
+                        :load => -6.208490424493184e-19,
+                          :dy => -4.744401839842294e-21,
+                          :mz => 6.781724047946385e-41,
+            :tyre_dirty_level => 0.0,
+                  :camber_rad => 0.0,
+                 :tyre_radius => 0.0,
+          :tyre_loaded_radius => -1.7905676941154525e-12,
+           :suspension_height => 1616834461696.0,
+     :car_position_normalized => -3.3259839632500463e+38,
+                   :car_slope => 352712.4375,
+             :car_coordinates => 2.046176017607098e-41
+}
+
+# HandshakerResponse
+{
+        :car_name => "ks_abarth500_assetto_corse%\u0000☠ॹ\u0002\u0000\u0001\xDFႯ\u0002\u0000ў\u0002\u0000䘠ҩ\u0002\u0000ീ\a\u0000ꪋ쌙",
+     :driver_name => "bradleyland%긕앀脴\b\u0000蔁媶긕앀脴\b\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000앀脴\b\u0000\u0000\u0000\u0000\u0000ධ\a\u0000幕ǿ\b\u0000",
+      :identifier => 4242,
+         :version => 1,
+      :track_name => "ks_vallelunga%\u0000\u0000Ā\u0000\u0000\u0000  \u0002\u0000ࢰΥ\u0002\u0000\u08C0Υ\u0002\u0000\u08C0Υ\u0002\u0000\u0E00\a\u0000\xB9\xD9ǿ\b\u0000\u0E70\a\u0000Ǿ",
+    :track_config => "ks_vallelunga%\u0000\u0000\u0000\u0000\u0EA0\a\u0000螔ȁ\b\u0000蔁媶긕앀脴\b\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000앀脴\b\u0000\u0000\u0000\u0000\u0000"
+}
