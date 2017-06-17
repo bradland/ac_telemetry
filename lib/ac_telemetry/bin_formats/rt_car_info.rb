@@ -23,7 +23,7 @@ module ACTelemetry
       int8 :is_tc_enabled
       int8 :is_in_pit
       int8 :is_engine_limiter_on
-      string :flags, read_length: 2
+      string :flags, read_length: 2 # These two bytes are unknown; they do not appear to change from \x00.
 
       # Accelerative force (g) in each orientation relative to the car
       float :acc_g_vertical
