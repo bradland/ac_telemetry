@@ -2,7 +2,7 @@ require 'bindata'
 require 'bindata/ext/string'
 
 module ACTelemetry
-  module Formats
+  module BinFormats
     class RTLap < BinData::Record
       int32le :car_identifier_number
       int32le :lap

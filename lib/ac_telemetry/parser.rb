@@ -1,26 +1,27 @@
-require 'ac_telemetry/formats/all'
+require 'ac_telemetry/bin_formats/all'
 
 module ACTelemetry
   class Parser
-    include ACTelemetry::Formats
+    include ACTelemetry::BinFormats
     
-    def detect(record)
-      case record[:bytesize]
+    # Detects the type of record received from AC based on the size
+    def detect(net_record)
+      case net_record[:bytesize]
       when 408
-        handle_handshake_response(record)
+        handle_handshake_response(net_record)
       when 328
-        handle_rtcarinfo(record)
+        handle_rtcarinfo(net_record)
       else
         nil
       end
     end
 
-    def handle_handshake_response(record)
-      HandshakerResponse.read(record[:snap])
+    def handle_handshake_response(net_record)
+      HandshakerResponse.read(net_record[:snap])
     end
 
-    def handle_rtcarinfo(record)
-      RTCarInfo.read(record[:snap])
+    def handle_rtcarinfo(net_record)
+      RTCarInfo.read(net_record[:snap])
     end
   end
 end

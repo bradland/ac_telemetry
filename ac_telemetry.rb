@@ -15,26 +15,74 @@
 
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 
+require 'optparse'
+require 'ostruct'
 require 'socket'
+require 'logger'
+require 'shell_script_utils'
 require 'ac_telemetry/parser'
-require 'ac_telemetry/formats/all'
+require 'ac_telemetry/record_formatter'
+require 'ac_telemetry/bin_formats/all'
+
 
 class ACTelemetryCLI
-  include ACTelemetry::Formats
+  include ShellScriptUtils
+  include ACTelemetry::BinFormats
+
+  Thread.abort_on_exception=true # add this
+
+  ::Version = [0,0,1]
 
   AC_PORT = 9996
   AC_HANDSHAKE = Handshaker.new(identifier: 1, version: 1, operation_id: 0).to_binary_s
   AC_UPDATE = Handshaker.new(identifier: 1, version: 1, operation_id: 1).to_binary_s
   AC_DISMISS = Handshaker.new(identifier: 1, version: 1, operation_id: 3).to_binary_s
 
-  CLIENT_PORT = 0 # Ruby will use ephemeral port when 0 is specified.
+  # Ruby will use ephemeral port when 0 is specified, but locking this to a port allows us to resume.
+  CLIENT_PORT = 9997
   CLIENT_IP_ADDR = '0.0.0.0' # Bind to all interfaces.
 
   def initialize(args)
+    @options = OpenStruct.new
+    @options.verbose = false
+
+    opt_parser = OptionParser.new do |opt|
+      opt.banner = "Usage: #{$0} [OPTION]... [IP_ADDR]..."
+
+      opt.on("-r","--raw","Output raw record data.") do |r|
+        @options.verbose = r
+      end
+
+      opt.on_tail("-h","--help","Print usage information.") do
+        $stderr.puts opt_parser
+        exit 0
+      end
+
+      opt.on_tail("--version", "Show version") do
+        puts ::Version.join('.')
+        exit 0
+      end
+    end
+
+    begin 
+      opt_parser.parse!
+    rescue OptionParser::InvalidOption => e
+      $stderr.puts "Specified #{e}"
+      $stderr.puts opt_parser
+      exit 64 # EX_USAGE
+    end
+
+    if ARGV.size < 1
+      $stderr.puts "No target IP provided."
+      $stderr.puts opt_parser
+      exit 64 # EX_USAGE
+    end
+
     @ac_ip_addr = args.pop
     @udp = UDPSocket.new
     @udp.bind(CLIENT_IP_ADDR, CLIENT_PORT)
     @parser = ACTelemetry::Parser.new
+    @formatter = ACTelemetry::RecordFormatter.new
     @lock = Mutex.new
   end
 
@@ -82,9 +130,8 @@ class ACTelemetryCLI
 
   def listen
     Thread.new do
-      reader do |record|
-        output "#{@parser.detect(record).inspect}\n", $stdout
-        @lock.synchronize { $stdout.flush }
+      reader do |net_record|
+        handle_record(@parser.detect(net_record))
       end
     end
   end
@@ -93,13 +140,13 @@ class ACTelemetryCLI
     loop do
       data, addrinfo = @udp.recvfrom(4096)
       host, port = addrinfo[3], addrinfo[1]
-      record = {
+      net_record = {
         host: host,
         port: port,
         bytesize: data.bytesize,
         snap: data
       }
-      yield record
+      yield net_record
     end
   end
 
@@ -107,8 +154,16 @@ class ACTelemetryCLI
     @udp.send(msg,0,@ac_ip_addr,AC_PORT)
   end
 
-  def output(msg, io = $stderr)
-    @lock.synchronize { io.puts msg }
+  def output(msg, io = $stderr, flush=false)
+    @lock.synchronize do
+      io.puts msg
+      $stdout.flush if flush
+    end
+  end
+
+  def handle_record(record)
+    output(@formatter.format(record), $stdout, true)
+    # output("#{@parser.detect(record).inspect}\n", $stdout, true)
   end
 end
 

@@ -2,7 +2,7 @@ require 'bindata'
 require 'bindata/ext/string'
 
 module ACTelemetry
-  module Formats
+  module BinFormats
     class HandshakerResponse < BinData::Record
       string :car_name, read_length: 100
       string :driver_name, read_length: 100
