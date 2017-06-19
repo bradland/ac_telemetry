@@ -156,7 +156,7 @@ class ACTelemetryCLI
 
   def output(msg, io = $stderr, flush=false)
     @lock.synchronize do
-      io.puts msg
+      io.puts msg unless msg.nil? || msg.empty?
       $stdout.flush if flush
     end
   end
