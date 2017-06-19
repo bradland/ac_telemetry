@@ -20,9 +20,9 @@ require 'ostruct'
 require 'socket'
 require 'logger'
 require 'shell_script_utils'
-require 'ac_telemetry/parser'
-require 'ac_telemetry/record_formatter'
+require 'ac_telemetry/dispatcher'
 require 'ac_telemetry/bin_formats/all'
+require 'ac_telemetry/record_formatter'
 
 
 class ACTelemetryCLI
@@ -81,7 +81,7 @@ class ACTelemetryCLI
     @ac_ip_addr = args.pop
     @udp = UDPSocket.new
     @udp.bind(CLIENT_IP_ADDR, CLIENT_PORT)
-    @parser = ACTelemetry::Parser.new
+    @dispatcher = ACTelemetry::Dispatcher.new
     @formatter = ACTelemetry::RecordFormatter.new
     @lock = Mutex.new
   end
@@ -131,7 +131,7 @@ class ACTelemetryCLI
   def listen
     Thread.new do
       reader do |net_record|
-        handle_record(@parser.detect(net_record))
+        output(@dispatcher.process(net_record), $stdout, true)
       end
     end
   end
@@ -159,11 +159,6 @@ class ACTelemetryCLI
       io.puts msg unless msg.nil? || msg.empty?
       $stdout.flush if flush
     end
-  end
-
-  def handle_record(record)
-    output(@formatter.format(record), $stdout, true)
-    # output("#{@parser.detect(record).inspect}\n", $stdout, true)
   end
 end
 
