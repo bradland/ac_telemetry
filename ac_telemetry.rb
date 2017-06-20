@@ -36,6 +36,7 @@ class ACTelemetryCLI
   AC_PORT = 9996
   AC_HANDSHAKE = Handshaker.new(identifier: 1, version: 1, operation_id: 0).to_binary_s
   AC_UPDATE = Handshaker.new(identifier: 1, version: 1, operation_id: 1).to_binary_s
+  AC_SPOT = Handshaker.new(identifier: 1, version: 1, operation_id: 2).to_binary_s
   AC_DISMISS = Handshaker.new(identifier: 1, version: 1, operation_id: 3).to_binary_s
 
   # Ruby will use ephemeral port when 0 is specified, but locking this to a port allows us to resume.
@@ -97,7 +98,7 @@ class ACTelemetryCLI
     loop do
       timestamp = -> { Time.now.to_s }
 
-      output "Command? [(h)andshake,(u)pdate,(d)ismiss,(q)uit]"
+      output "Command? [(h)andshake,(u)pdate,(s)pot,(d)ismiss,(q)uit]"
       cmd = gets.chomp
 
       case cmd
@@ -107,6 +108,8 @@ class ACTelemetryCLI
         request :update
       when "d"
         request :dismiss
+      when "s"
+        request :spot
       when "q"
         send AC_DISMISS
         output "Exiting..."
@@ -123,6 +126,9 @@ class ACTelemetryCLI
     when :update
       output "Sending update..."
       send AC_UPDATE
+    when :update
+      output "Sending spot..."
+      send AC_SPOT
     when :dismiss
       output "Sending dismiss..."
       send AC_DISMISS
