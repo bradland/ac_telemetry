@@ -43,6 +43,12 @@ class ACTelemetryCLI
   CLIENT_IP_ADDR = '0.0.0.0' # Bind to all interfaces.
 
   def initialize(args)
+    Signal.trap("INT") do
+      send AC_DISMISS
+      $stderr.puts "Sending dismiss and exiting..."
+      exit 130
+    end
+
     @options = OpenStruct.new
     @options.verbose = false
 
@@ -102,6 +108,7 @@ class ACTelemetryCLI
       when "d"
         request :dismiss
       when "q"
+        send AC_DISMISS
         output "Exiting..."
         exit 0
       end
@@ -112,15 +119,15 @@ class ACTelemetryCLI
     case type
     when :handshake
       output "Sending handshake..."
-      send(AC_HANDSHAKE)
+      send AC_HANDSHAKE
     when :update
       output "Sending update..."
-      send(AC_UPDATE)
+      send AC_UPDATE
     when :dismiss
       output "Sending dismiss..."
-      send(AC_DISMISS)
+      send AC_DISMISS
     else
-      send(type)
+      send type
     end
   end
 
