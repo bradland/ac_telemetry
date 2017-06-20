@@ -23,6 +23,8 @@ module ACTelemetry
         cols_custom_fmt(record,
           [:lap_time,
             :gas,
+            :is_tc_enabled,
+            :is_tc_in_action,
             :speed_mph,
             :engine_rpm,
             :gear,
