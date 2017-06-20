@@ -91,7 +91,7 @@ class ACTelemetryCLI
     loop do
       timestamp = -> { Time.now.to_s }
 
-      output "Command? [(h)andshake,(u)pdate,(d)ismiss,(t)test,(q)uit]"
+      output "Command? [(h)andshake,(u)pdate,(d)ismiss,(q)uit]"
       cmd = gets.chomp
 
       case cmd
@@ -101,10 +101,6 @@ class ACTelemetryCLI
         request :update
       when "d"
         request :dismiss
-      when "t"
-        msg = "Test: #{timestamp.call}"
-        output "Sending test message to #{@ac_ip_addr}:#{AC_PORT}"
-        request msg
       when "q"
         output "Exiting..."
         exit 0
