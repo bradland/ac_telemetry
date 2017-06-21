@@ -54,7 +54,21 @@ class ACTelemetryCLI
     @options.verbose = false
 
     opt_parser = OptionParser.new do |opt|
-      opt.banner = "Usage: #{$0} [OPTION]... [IP_ADDR]..."
+      opt.banner = "\nUsage: #{$0} [OPTION]... [IP_ADDR]...
+
+  AC Telemetry provides a CLI interface for sending handshake requests to a
+  device running Assetto Corsa (AC), and a formatter for parsing and
+  formatting the responses.
+
+  When executed, you will be prompted to issue a command. This command will
+  instruct the application to send a specific handshake request type to the AC
+  application running on the target IP address (IP_ADDR argument).
+
+  AC Telemetry will receive the responses and dispatch them to the formatters
+  defined in the ACTelemetry::RecordFormatters sub-classes, for each response
+  type.
+
+  "
 
       opt.on("-r","--raw","Output raw record data.") do |r|
         @options.verbose = r
