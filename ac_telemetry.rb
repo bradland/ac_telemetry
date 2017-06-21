@@ -126,7 +126,7 @@ class ACTelemetryCLI
         request :spot
       when "q"
         send AC_DISMISS
-        output "Exiting..."
+        output "Sending dismiss and exiting..."
         exit 0
       end
     end
