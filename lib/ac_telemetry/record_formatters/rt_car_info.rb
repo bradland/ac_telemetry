@@ -23,14 +23,16 @@ module ACTelemetry
         cols_custom_fmt(record,
           [:lap_time,
             :gas,
-            :is_tc_enabled,
-            :is_tc_in_action,
             :speed_mph,
             :engine_rpm,
             :gear,
             :acc_g_horizontal,
             :acc_g_frontal],
             "%d,%0.2f,%0.2f,%0.2f,%d,%0.2f,%0.2f") if record.gas == 1.0
+
+        # Raw output
+        # record.to_binary_s
+        # record.to_s
 
         ### Col group with unified formatter
         # cols_single_fmt(record,[:gas, 
