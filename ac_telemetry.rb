@@ -51,7 +51,7 @@ class ACTelemetryCLI
     end
 
     @options = OpenStruct.new
-    @options.verbose = false
+    @options.raw = false
 
     opt_parser = OptionParser.new do |opt|
       opt.banner = "\nUsage: #{$0} [OPTION]... [IP_ADDR]...
@@ -71,7 +71,7 @@ class ACTelemetryCLI
   "
 
       opt.on("-r","--raw","Output raw record data.") do |r|
-        @options.verbose = r
+        @options.raw = r
       end
 
       opt.on_tail("-h","--help","Print usage information.") do
@@ -140,7 +140,7 @@ class ACTelemetryCLI
     when :update
       output "Sending update..."
       send AC_UPDATE
-    when :update
+    when :spot
       output "Sending spot..."
       send AC_SPOT
     when :dismiss
