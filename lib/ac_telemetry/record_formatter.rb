@@ -1,5 +1,6 @@
 require 'ac_telemetry/bin_formats/all'
 require 'ac_telemetry/record_formatters/all'
+require 'ac_telemetry/record_formatters/custom_logger'
 
 module ACTelemetry
   class RecordFormatter
@@ -7,7 +8,7 @@ module ACTelemetry
 
     def initialize
       @handshaker_response = HandshakerResponse.new
-      @rt_car_info = RTCarInfo.new
+      @rt_car_info = CustomLogger.new
       @rt_lap = RTLap.new
     end
 
